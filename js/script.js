@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const firstDay = new Date(year, month, 1).getDay();
         const lastDate = new Date(year, month + 1, 0).getDate();
 
+        console.log(`Generating calendar for ${year}-${month + 1}`);
+
         let html = `<h2>${currentDate.toLocaleString('default', { month: 'long' })} ${year}</h2>`;
         html += '<table><thead><tr>';
         html += '<th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>';
@@ -40,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         html += '</tbody></table>';
         calendarContainer.innerHTML = html;
+        console.log('Calendar HTML:', html); // Check if the HTML is being generated
         attachDateClickListeners();
     }
 
