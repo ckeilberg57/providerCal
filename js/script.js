@@ -4,9 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('appointment-modal');
     const closeBtn = document.querySelector('.close-btn');
     const appointmentForm = document.getElementById('appointment-form');
-    const currentDateElem = document.createElement('div');
+    const currentDateElem = document.getElementById('current-date');
+    const appointmentsContainer = document.getElementById('appointments');
 
     let currentDate = new Date();
+    let appointments = {};
 
     function generateCalendar() {
         const year = currentDate.getFullYear();
@@ -29,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (day > lastDate) {
                     break;
                 } else {
-                    html += `<td>${day}</td>`;
+                    html += `<td data-date="${year}-${month + 1}-${day}">${day}</td>`;
                     day++;
                 }
             }
@@ -38,11 +40,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         html += '</tbody></table>';
         calendarContainer.innerHTML = html;
+        attachDateClickListeners();
+    }
+
+    function attachDateClickListeners() {
+        const dates = calendarContainer.querySelectorAll('td[data-date]');
+        dates.forEach(date => {
+            date.addEventListener('click', function() {
+                const selectedDate = this.getAttribute('data-date');
+                displayAppointments(selectedDate);
+            });
+        });
     }
 
     function updateCurrentDate() {
         currentDateElem.innerHTML = `Today: ${currentDate.toDateString()}`;
-        document.querySelector('header').appendChild(currentDateElem);
     }
 
     function openModal() {
@@ -55,8 +67,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function saveAppointment(event) {
         event.preventDefault();
-        // Handle appointment saving logic here
+        const date = document.getElementById('appointment-date').value;
+        const time = document.getElementById('appointment-time').value;
+        const details = document.getElementById('appointment-details').value;
+
+        if (!appointments[date]) {
+            appointments[date] = [];
+        }
+        appointments[date].push({ time, details });
         closeModal();
+        displayAppointments(date);
+    }
+
+    function displayAppointments(date) {
+        const dateFormatted = new Date(date).toDateString();
+        const appointmentsForDate = appointments[date] || [];
+        let html = `<h2>Appointments for ${dateFormatted}</h2>`;
+        if (appointmentsForDate.length === 0) {
+            html += '<p>No appointments scheduled.</p>';
+        } else {
+            html += '<ul>';
+            appointmentsForDate.forEach(appt => {
+                html += `<li><strong>${appt.time}</strong>: ${appt.details}</li>`;
+            });
+            html += '</ul>';
+        }
+        appointmentsContainer.innerHTML = html;
     }
 
     addAppointmentBtn.addEventListener('click', openModal);
