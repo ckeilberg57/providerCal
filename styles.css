@@ -70,3 +70,24 @@ textarea {
     height: 100px;
     margin-bottom: 10px;
 }
+
+#appointments {
+    margin-top: 20px;
+}
+
+#appointments h2 {
+    margin: 0;
+}
+
+#appointments ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#appointments li {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
