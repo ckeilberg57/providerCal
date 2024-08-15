@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="chat-container">
-        <div id="chat-output"></div>
-        <div id="message-input">
-            <input type="text" id="chat-input" placeholder="Type your message here..." />
-            <button id="send-btn">Send</button>
+    <div class="chatbot-container">
+        <div class="chatbot-header">Simulated Patient Booking Portal</div>
+        <div class="chat-container">
+            <div id="chat-output"></div>
+            <div id="message-input">
+                <input type="text" id="chat-input" placeholder="Type your message here" />
+                <button id="send-btn">Send</button>
+            </div>
         </div>
     </div>
 
@@ -27,17 +30,17 @@
             chatInput.value = '';
             if (userMessage === '') return;
 
-            displayMessage(`You: ${userMessage}`);
+            displayMessage(`You: ${userMessage}`, 'user');
 
             if (['hello', 'hi', 'help'].includes(userMessage)) {
-                displayMessage('How may I be of assistance today? Here are some common questions:');
+                displayMessage('How may I be of assistance today? Here are some common questions:', 'bot');
                 displayOptions(['Book a consultation', 'Speak to a nurse', 'Cancel a consultation']);
             }
         }
 
-        function displayMessage(message) {
+        function displayMessage(message, type) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = 'message';
+            msgDiv.className = `message ${type}`;
             msgDiv.innerText = message;
             chatOutput.appendChild(msgDiv);
         }
@@ -56,7 +59,7 @@
 
         function handleOptionSelection(option) {
             if (option === 'Book a consultation' || option === 'Speak to a nurse') {
-                displayMessage('Great, let me assist in booking an appointment.');
+                displayMessage('Great, let me assist in booking an appointment.', 'bot');
                 showDateTimePicker();
             }
         }
@@ -90,9 +93,12 @@
 
             // Generate .ics file
             const icsContent = generateICS(date, time, consultationUrl);
-            downloadICS(icsContent);
-
-            displayMessage('Great, your consultation is booked.');
+            displayMessage('Great, your consultation is booked. Please download the .ics file below.', 'bot');
+            const downloadLink = document.createElement('a');
+            downloadLink.href = `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
+            downloadLink.download = 'consultation.ics';
+            downloadLink.innerText = 'Download .ics';
+            chatOutput.appendChild(downloadLink);
         }
 
         function generateICS(date, time, url) {
@@ -111,17 +117,6 @@ END:VEVENT
 END:VCALENDAR
             `.trim();
             return event;
-        }
-
-        function downloadICS(content) {
-            const blob = new Blob([content], { type: 'text/calendar' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'consultation.ics';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
         }
     </script>
 </body>
