@@ -4,31 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .chat-container {
-            border: 1px solid #ccc;
-            padding: 10px;
-            height: 100%;
-        }
-        .message {
-            margin: 5px 0;
-        }
-        .options {
-            margin-top: 10px;
-        }
-        .datetime-picker {
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="chat-container">
         <div id="chat-output"></div>
-        <input type="text" id="chat-input" placeholder="Type your message here" />
-        <button id="send-btn">Send</button>
+        <div id="message-input">
+            <input type="text" id="chat-input" placeholder="Type your message here..." />
+            <button id="send-btn">Send</button>
+        </div>
     </div>
 
     <script>
