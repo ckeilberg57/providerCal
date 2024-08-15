@@ -9,19 +9,23 @@
 <body>
     <div class="calendar-and-chat-container">
         <div class="calendar-container">
+            <h2 id="calendar-month-name">Current Month Calendar</h2>
+            <div id="calendar-navigation">
+                <button id="prev-month">Previous</button>
+                <span id="calendar-month-name"></span>
+                <button id="next-month">Next</button>
+            </div>
             <div id="searchable-calendar-container">
-                <div id="calendar-navigation">
-                    <button id="previous-month">Previous</button>
-                    <div id="calendar-month-name"></div>
-                    <button id="next-month">Next</button>
-                </div>
                 <div id="searchable-calendar"></div>
             </div>
             <div id="appointment-list">
-                <!-- Appointments will be displayed here -->
+                <h3>My Meetings</h3>
+                <ul id="meetings-list">
+                    <!-- Appointments will be added here -->
+                </ul>
             </div>
         </div>
-        <iframe src="chatbot.html" class="chatbot-container"></iframe>
+        <iframe src="chatbot.html" style="width: 4in; height: 6in; border: none;"></iframe>
     </div>
 
     <script src="js/script.js"></script>
