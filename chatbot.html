@@ -154,4 +154,15 @@ END:VCALENDAR
         }
 
         function displayDownloadLink(content) {
-            const blob = new Blob([content
+            const blob = new Blob([content], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'appointment.ics';
+            link.innerText = 'Download .ics file';
+            link.className = 'download-link';
+            chatOutput.appendChild(link);
+        }
+    </script>
+</body>
+</html>
