@@ -39,8 +39,8 @@
         }
         #searchable-calendar {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            grid-template-rows: auto repeat(6, 1fr);
+            grid-template-columns: repeat(7, 1fr); /* 7 columns for days of the week */
+            grid-template-rows: auto repeat(6, 1fr); /* 1 row for header, 6 rows for calendar days */
             gap: 1px;
             background-color: #0a2136;
         }
@@ -56,20 +56,9 @@
             text-align: center;
             cursor: pointer;
             color: white;
-            position: relative;
         }
         .day:hover {
             background: #1e2a38;
-        }
-        .appointment-dot {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 8px;
-            height: 8px;
-            background-color: #00ff00;
-            border-radius: 50%;
-            display: inline-block;
         }
         #calendar-navigation {
             display: flex;
@@ -93,6 +82,51 @@
         #appointment-list {
             margin-top: 20px;
         }
+        .chat-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-output {
+            color: white;
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .options {
+            margin-top: 10px;
+        }
+        .datetime-picker {
+            margin-top: 10px;
+        }
+        a.download-link {
+            color: #ff7273;
+            text-decoration: none;
+        }
+        .day {
+            position: relative;
+            padding: 5px; /* Add some padding to ensure the dot is not cut off */
+        }
+        
+        .appointment-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            background-color: #00ff00; /* Green color */
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .has-appointments {
+            background-color: green;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -106,6 +140,14 @@
                     <button id="next-month">Next</button>
                 </div>
                 <div id="searchable-calendar">
+                    <!-- Header for days of the week -->
+                    <div class="header">Sun</div>
+                    <div class="header">Mon</div>
+                    <div class="header">Tue</div>
+                    <div class="header">Wed</div>
+                    <div class="header">Thu</div>
+                    <div class="header">Fri</div>
+                    <div class="header">Sat</div>
                     <!-- Calendar days will be dynamically inserted here -->
                 </div>
             </div>
