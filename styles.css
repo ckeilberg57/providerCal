@@ -2,40 +2,33 @@ body {
     font-family: Arial, sans-serif;
     background-color: #0a2136;
     color: white;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
     margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .calendar-and-chat-container {
     display: flex;
-    flex-grow: 1;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
 }
 
 .calendar-container {
     flex: 2;
     padding: 20px;
-    border-right: 1px solid #ccc;
     position: relative;
 }
 
-.chatbot-container {
-    flex: 1;
-    padding: 20px;
-}
-
 #searchable-calendar-container {
-    position: absolute;
-    top: 20px;
-    left: 20px;
     width: 5in;
     height: 3.5in;
     border: 1px solid #ccc;
     padding: 10px;
     box-sizing: border-box;
-    overflow: auto;
-    background: #0a2136;
+    background-color: #0a2136;
 }
 
 #searchable-calendar {
@@ -85,37 +78,35 @@ button:hover {
 }
 
 #calendar-month-name {
+    color: white;
     flex-grow: 1;
     text-align: center;
 }
 
-#calendar-month-name {
-    color: white;
-}
-
 #appointment-list {
-    margin-top: 3.5in; /* Ensure appointments are below the calendar */
+    margin-top: 20px;
 }
 
 .chatbot-container {
-    border: 1px solid #ccc;
+    flex: 1;
+    border: 1px solid #0eb3c7;
     padding: 10px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    background-color: #1e2a38;
 }
 
-#chat-container {
+.chat-container {
+    border: 1px solid #0eb3c7;
+    padding: 10px;
+    height: 100%;
+    background-color: #1e2a38;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding: 10px;
+    border-radius: 5px;
 }
 
 #chat-output {
     flex-grow: 1;
     overflow-y: auto;
-    margin-bottom: 10px;
     background-color: #1e2a38;
     padding: 10px;
     border-radius: 5px;
@@ -123,9 +114,10 @@ button:hover {
 
 #message-input {
     display: flex;
+    margin-top: 10px;
 }
 
-#message {
+#chat-input {
     flex-grow: 1;
     padding: 10px;
     border: none;
@@ -135,7 +127,7 @@ button:hover {
     color: white;
 }
 
-#send-button {
+#send-btn {
     padding: 10px;
     border: none;
     border-radius: 5px;
@@ -145,7 +137,7 @@ button:hover {
     margin-left: 10px;
 }
 
-#send-button:hover {
+#send-btn:hover {
     background-color: #0a9fb1;
 }
 
@@ -166,4 +158,50 @@ button:hover {
     background-color: #2e3a4a;
     color: white;
     align-self: flex-start;
+}
+
+.options {
+    margin-top: 10px;
+}
+
+.options button {
+    border: 1px solid #0eb3c7;
+    color: white;
+    background-color: transparent;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.options button:hover {
+    background-color: #0eb3c7;
+}
+
+.datetime-picker {
+    margin-top: 10px;
+}
+
+.datetime-picker input[type="date"],
+.datetime-picker input[type="time"] {
+    margin-right: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #0eb3c7;
+    background-color: #0e2136;
+    color: white;
+}
+
+.datetime-picker button {
+    border: 1px solid #0eb3c7;
+    color: white;
+    background-color: transparent;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+.datetime-picker button:hover {
+    background-color: #0eb3c7;
 }
