@@ -4,24 +4,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('appointment-modal');
     const closeBtn = document.querySelector('.close-btn');
     const appointmentForm = document.getElementById('appointment-form');
+    const currentDateElem = document.createElement('div');
 
-    // Generate a simple calendar (for demonstration purposes)
+    let currentDate = new Date();
+
     function generateCalendar() {
-        let html = '<table><thead><tr>';
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        let html = `<h2>${currentDate.toLocaleString('default', { month: 'long' })} ${year}</h2>`;
+        html += '<table><thead><tr>';
         html += '<th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>';
         html += '</tr></thead><tbody>';
 
-        // Just a simple example, you can improve this to show the real dates
-        for (let i = 0; i < 5; i++) {
+        let day = 1;
+
+        for (let i = 0; i < 6; i++) {
             html += '<tr>';
             for (let j = 0; j < 7; j++) {
-                html += '<td></td>';
+                if (i === 0 && j < firstDay) {
+                    html += '<td></td>';
+                } else if (day > lastDate) {
+                    break;
+                } else {
+                    html += `<td>${day}</td>`;
+                    day++;
+                }
             }
             html += '</tr>';
         }
 
         html += '</tbody></table>';
         calendarContainer.innerHTML = html;
+    }
+
+    function updateCurrentDate() {
+        currentDateElem.innerHTML = `Today: ${currentDate.toDateString()}`;
+        document.querySelector('header').appendChild(currentDateElem);
     }
 
     function openModal() {
@@ -43,4 +64,5 @@ document.addEventListener('DOMContentLoaded', function() {
     appointmentForm.addEventListener('submit', saveAppointment);
 
     generateCalendar();
+    updateCurrentDate();
 });
