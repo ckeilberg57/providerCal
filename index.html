@@ -20,13 +20,70 @@
             flex: 2;
             padding: 20px;
             border-right: 1px solid #ccc;
+            position: relative;
         }
         .chatbot-container {
             flex: 1;
             padding: 20px;
         }
         #searchable-calendar-container {
-            margin-top: 20px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 3in;
+            height: 4in;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: auto;
+            background: white;
+        }
+        #searchable-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+        }
+        #searchable-calendar div {
+            padding: 5px;
+            text-align: center;
+        }
+        #searchable-calendar .header {
+            font-weight: bold;
+            background: #f0f0f0;
+        }
+        .day {
+            cursor: pointer;
+        }
+        .day:hover {
+            background: #e0e0e0;
+        }
+        #appointment-list {
+            margin-top: 5in; /* Ensure appointments are below the calendar */
+        }
+        .chat-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-output {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .options {
+            margin-top: 10px;
+        }
+        .datetime-picker {
+            margin-top: 10px;
+        }
+        a.download-link {
+            color: #ff7273;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -34,19 +91,18 @@
     <h1>Provider Calendar</h1>
     <div class="calendar-and-chat-container">
         <div class="calendar-container">
-            <div id="calendar"></div>
-            <div id="appointment-list"></div>
-            <!-- New searchable calendar -->
             <div id="searchable-calendar-container">
                 <h3>Searchable Provider Calendar</h3>
                 <div id="searchable-calendar"></div>
             </div>
+            <div id="calendar"></div>
+            <div id="appointment-list"></div>
         </div>
         <div class="chatbot-container">
             <iframe id="chatbot-frame" src="chatbot.html" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
