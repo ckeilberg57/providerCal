@@ -9,21 +9,25 @@ body {
 .calendar-and-chat-container {
     display: flex;
     justify-content: space-between;
-    height: 100vh; /* Ensure full height */
+    height: 100vh;
 }
 
 /* Calendar container styles */
 .calendar-container {
-    width: calc(100% - 4in); /* Adjust width based on iframe size */
+    width: 5in; /* Fixed width for calendar */
+    height: 3.5in; /* Fixed height for calendar */
     padding: 10px;
     background-color: #0a2136; /* Background color for calendar */
     color: white;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 #calendar-month-name {
     text-align: center;
     margin: 10px 0;
+    font-size: 1.2em;
 }
 
 /* Navigation buttons for calendar */
@@ -40,6 +44,7 @@ body {
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 0.9em;
 }
 
 #calendar-navigation button:hover {
@@ -51,16 +56,12 @@ body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
-}
-
-.row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    margin-top: 10px;
 }
 
 .day, .empty {
     width: 100%;
-    height: 30px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -69,6 +70,7 @@ body {
 .day {
     cursor: pointer;
     border: 1px solid #0eb3c7;
+    background-color: #0a2136;
 }
 
 .day:hover {
@@ -96,6 +98,7 @@ body {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #0eb3c7;
+    font-size: 1.2em;
 }
 
 .chat-container {
