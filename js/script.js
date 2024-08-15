@@ -14,21 +14,22 @@ function displayCalendar(month, year) {
 
     calendarContainer.innerHTML = '';
 
-    // Header Row for days of the week
+    // Add header row for days of the week
+    const headerRow = document.createElement('div');
+    headerRow.className = 'header';
     ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
         const dayDiv = document.createElement('div');
         dayDiv.innerText = day;
-        dayDiv.className = 'header';
-        calendarContainer.appendChild(dayDiv);
+        headerRow.appendChild(dayDiv);
     });
+    calendarContainer.appendChild(headerRow);
 
-    // Empty cells for days before the first day of the month
+    // Add empty cells for days before the start of the month
     for (let i = 0; i < firstDay; i++) {
-        const emptyDiv = document.createElement('div');
-        calendarContainer.appendChild(emptyDiv);
+        calendarContainer.appendChild(document.createElement('div'));
     }
 
-    // Days of the month
+    // Add cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
         const dayDiv = document.createElement('div');
         dayDiv.innerText = day;
@@ -80,7 +81,6 @@ displaySearchableCalendar(currentMonth, currentYear);
 
 // Expose addAppointmentToCalendar function globally
 window.addAppointmentToCalendar = function(date, time, details, url) {
-    console.log('Adding appointment:', { date, time, details, url }); // Debug log
     const dateStr = `${date}T${time}`;
     if (!appointments[dateStr]) {
         appointments[dateStr] = [];
