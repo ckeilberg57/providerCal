@@ -92,25 +92,36 @@ button:hover {
     width: 4in;
     height: 6in;
     border: 1px solid #0eb3c7;
-    padding: 10px;
-    background-color: #1e2a38;
+    background-color: #1e2a4a;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatbot-header {
+    background-color: #0eb3c7;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .chat-container {
-    border: 1px solid #0eb3c7;
-    padding: 10px;
-    height: 100%;
-    background-color: #1e2a38;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    border-radius: 5px;
+    padding: 10px;
+    background-color: #1e2a4a;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 #chat-output {
     flex-grow: 1;
     overflow-y: auto;
-    background-color: #1e2a38;
+    background-color: #1e2a4a;
     padding: 10px;
     border-radius: 5px;
 }
