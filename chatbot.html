@@ -70,7 +70,7 @@
             chatInput.value = '';
             if (userMessage === '') return;
 
-            displayMessage(You: ${userMessage});
+            displayMessage(`You: ${userMessage}`);
 
             if (['hello', 'hi', 'help'].includes(userMessage)) {
                 displayMessage('How may I be of assistance today? Here are some common questions:');
@@ -120,7 +120,7 @@
                 const appList = currentAppointments[dateStr];
                 appList.forEach((app, index) => {
                     const btn = document.createElement('button');
-                    btn.innerText = ${dateStr} ${app.time} - ${app.details};
+                    btn.innerText = `${dateStr} ${app.time} - ${app.details}`;
                     btn.addEventListener('click', () => confirmCancellation(dateStr, index));
                     optionsDiv.appendChild(btn);
                 });
@@ -130,7 +130,7 @@
         }
 
         function confirmCancellation(dateStr, index) {
-            displayMessage(Are you sure you want to cancel the appointment on ${dateStr} at ${currentAppointments[dateStr][index].time}?);
+            displayMessage(`Are you sure you want to cancel the appointment on ${dateStr} at ${currentAppointments[dateStr][index].time}?`);
             const optionsDiv = document.createElement('div');
             optionsDiv.className = 'options';
             const yesBtn = document.createElement('button');
@@ -189,11 +189,11 @@
 
         function saveConsultation(date, time) {
             const randomNumbers = Math.floor(Math.random() * 10000);
-            const consultationUrl = https://example.com/webapp/m/ph${randomNumbers}&role=guest;
+            const consultationUrl = `https://example.com/webapp/m/ph${randomNumbers}&role=guest`;
 
             // Add appointment to calendar on the parent window
             if (window.parent && typeof window.parent.addAppointmentToCalendar === 'function') {
-                window.parent.addAppointmentToCalendar(date, time, Your provider consultation is booked, consultationUrl);
+                window.parent.addAppointmentToCalendar(date, time, `Your provider consultation is booked`, consultationUrl);
             }
 
             // Store the appointment
@@ -210,7 +210,7 @@
         }
 
         function generateICS(date, time, url) {
-            const event = 
+            const event = `
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Your Organization//NONSGML v1.0//EN
@@ -223,7 +223,7 @@ DESCRIPTION:Your provider consultation is booked. Join at ${url}
 URL:${url}
 END:VEVENT
 END:VCALENDAR
-            .trim();
+            `.trim();
             return event;
         }
 
