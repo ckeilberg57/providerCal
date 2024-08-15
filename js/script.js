@@ -84,6 +84,6 @@ window.addAppointmentToCalendar = function(date, time, details, url) {
         appointments[dateStr] = [];
     }
     appointments[dateStr].push({ time, details, url });
-    displayAppointments(date);
+    displayAppointments(`${date}T${time}`);
     displaySearchableCalendar(currentMonth, currentYear);
 };
