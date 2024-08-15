@@ -40,6 +40,7 @@
         #searchable-calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: auto repeat(6, 1fr);
             gap: 1px;
         }
         #searchable-calendar div {
@@ -47,9 +48,11 @@
             text-align: center;
         }
         #searchable-calendar .header {
-            font-weight: bold;
+            grid-column: span 7; /* Make header span across all 7 columns */
+            text-align: center;
             background: #0ebec7;
             color: white;
+            font-weight: bold;
         }
         .day {
             cursor: pointer;
