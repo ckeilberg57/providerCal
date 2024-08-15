@@ -99,15 +99,17 @@ a.download-link {
 }
 
 button {
-    background-color: #0ebec7;
-    color: white;
-    border: none;
+    border: 1px solid #0eb3c7;
+    color: #0eb3c7;
+    background-color: transparent;
     padding: 10px;
     cursor: pointer;
     border-radius: 5px;
     font-size: 14px;
+    margin: 0 5px; /* Space buttons apart */
 }
 
 button:hover {
-    background-color: #0a9d9d;
+    background-color: #0eb3c7;
+    color: white;
 }
