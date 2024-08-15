@@ -87,19 +87,6 @@ nextMonthButton.addEventListener('click', () => changeMonth(1));
 
 displaySearchableCalendar(currentMonth, currentYear);
 
-// Expose addAppointmentToCalendar function globally
-window.addAppointmentToCalendar = function(date, time, details, url) {
-    const dateStr = `${date}`;
-    if (!appointments[dateStr]) {
-        appointments[dateStr] = [];
-    }
-    appointments[dateStr].push({ time, details, url });
-    
-    // Update calendar and appointment list
-    displaySearchableCalendar(currentMonth, currentYear);
-    displayAppointments(dateStr);
-};
-
 function removeAppointmentFromCalendar(dateStr, time) {
     if (appointments[dateStr]) {
         // Remove the specific appointment
@@ -112,8 +99,21 @@ function removeAppointmentFromCalendar(dateStr, time) {
         
         // Update the calendar and appointment list
         displaySearchableCalendar(currentMonth, currentYear);
-        if (currentAppointments[dateStr]) {
-            delete currentAppointments[dateStr];
-        }
     }
 }
+
+// Expose removeAppointmentFromCalendar function globally
+window.removeAppointmentFromCalendar = removeAppointmentFromCalendar;
+
+// Expose addAppointmentToCalendar function globally
+window.addAppointmentToCalendar = function(date, time, details, url) {
+    const dateStr = `${date}`;
+    if (!appointments[dateStr]) {
+        appointments[dateStr] = [];
+    }
+    appointments[dateStr].push({ time, details, url });
+    
+    // Update calendar and appointment list
+    displaySearchableCalendar(currentMonth, currentYear);
+    displayAppointments(dateStr);
+};
