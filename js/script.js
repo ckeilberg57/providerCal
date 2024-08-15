@@ -1,97 +1,46 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const calendar = document.getElementById('calendar');
-    const appointmentList = document.getElementById('appointment-list');
-    const searchableCalendar = document.getElementById('searchable-calendar');
-    const appointments = {};
+    const calendarContainer = document.getElementById('calendar');
+    const addAppointmentBtn = document.getElementById('add-appointment-btn');
+    const modal = document.getElementById('appointment-modal');
+    const closeBtn = document.querySelector('.close-btn');
+    const appointmentForm = document.getElementById('appointment-form');
 
-    function displayCalendar() {
-        const now = new Date();
-        const month = now.toLocaleString('default', { month: 'long' });
-        const year = now.getFullYear();
-        const day = now.getDate();
+    // Generate a simple calendar (for demonstration purposes)
+    function generateCalendar() {
+        let html = '<table><thead><tr>';
+        html += '<th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>';
+        html += '</tr></thead><tbody>';
 
-        calendar.innerHTML = `<h2>${month} ${year}</h2>`;
-        appointmentList.innerHTML = `<h3>Appointments for ${month} ${day}, ${year}:</h3>`;
-        displayAppointments(now.toISOString().split('T')[0]);
-    }
-
-    function displayAppointments(dateStr) {
-        appointmentList.innerHTML = `<h3>Appointments for ${dateStr}:</h3>`;
-        const appointmentDetails = appointments[dateStr];
-        if (appointmentDetails && appointmentDetails.length > 0) {
-            appointmentDetails.forEach(app => {
-                const appDiv = document.createElement('div');
-                appDiv.innerHTML = `<p><strong>${app.time}</strong>: ${app.details} <a href="${app.url}">Join</a></p>`;
-                appointmentList.appendChild(appDiv);
-            });
-        } else {
-            appointmentList.innerHTML += `<p>No appointments scheduled for this day.</p>`;
-        }
-    }
-
-    function displaySearchableCalendar() {
-        const now = new Date();
-        let currentMonth = now.getMonth();
-        let currentYear = now.getFullYear();
-
-        function renderCalendar(month, year) {
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            let daysHtml = '<div class="header">Sun</div><div class="header">Mon</div><div class="header">Tue</div><div class="header">Wed</div><div class="header">Thu</div><div class="header">Fri</div><div class="header">Sat</div>';
-
-            for (let i = 0; i < firstDay; i++) {
-                daysHtml += '<div></div>';
+        // Just a simple example, you can improve this to show the real dates
+        for (let i = 0; i < 5; i++) {
+            html += '<tr>';
+            for (let j = 0; j < 7; j++) {
+                html += '<td></td>';
             }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                daysHtml += `<div class="day" data-date="${year}-${month + 1}-${day}">${day}</div>`;
-            }
-
-            searchableCalendar.innerHTML = daysHtml;
-
-            const dayElements = searchableCalendar.getElementsByClassName('day');
-            Array.from(dayElements).forEach(dayElement => {
-                dayElement.addEventListener('click', () => {
-                    const dateStr = dayElement.getAttribute('data-date');
-                    displayAppointments(dateStr);
-                });
-            });
+            html += '</tr>';
         }
 
-        renderCalendar(currentMonth, currentYear);
-
-        // Add navigation buttons (optional)
-        const navButtons = document.createElement('div');
-        navButtons.innerHTML = `
-            <button onclick="changeMonth(-1)">Previous</button>
-            <button onclick="changeMonth(1)">Next</button>
-        `;
-        searchableCalendar.appendChild(navButtons);
-
-        window.changeMonth = function(offset) {
-            currentMonth += offset;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            } else if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            renderCalendar(currentMonth, currentYear);
-        };
+        html += '</tbody></table>';
+        calendarContainer.innerHTML = html;
     }
 
-    window.addAppointmentToCalendar = function(date, time, details, url) {
-        const dateStr = `${date}T${time}`;
-        if (!appointments[dateStr]) {
-            appointments[dateStr] = [];
-        }
-        appointments[dateStr].push({ time, details, url });
-        displayAppointments(dateStr.split('T')[0]);
-        displaySearchableCalendar();
-    };
+    function openModal() {
+        modal.style.display = 'flex';
+    }
 
-    displayCalendar();
-    displaySearchableCalendar();
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    function saveAppointment(event) {
+        event.preventDefault();
+        // Handle appointment saving logic here
+        closeModal();
+    }
+
+    addAppointmentBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    appointmentForm.addEventListener('submit', saveAppointment);
+
+    generateCalendar();
 });
