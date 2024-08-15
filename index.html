@@ -4,95 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Provider Calendar with Chatbot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
-        }
-        .calendar-and-chat-container {
-            display: flex;
-            flex-grow: 1;
-        }
-        .calendar-container {
-            flex: 2;
-            padding: 20px;
-            border-right: 1px solid #ccc;
-            position: relative;
-        }
-        .chatbot-container {
-            flex: 1;
-            padding: 20px;
-        }
-        #searchable-calendar-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 5in;
-            height: 3.5in;
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-sizing: border-box;
-            overflow: auto;
-            background: white;
-        }
-        #searchable-calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-        }
-        #searchable-calendar div {
-            padding: 5px;
-            text-align: center;
-        }
-        #searchable-calendar .header {
-            font-weight: bold;
-            background: #f0f0f0;
-        }
-        .day {
-            cursor: pointer;
-        }
-        .day:hover {
-            background: #e0e0e0;
-        }
-        #appointment-list {
-            margin-top: 3.5in; /* Ensure appointments are below the calendar */
-        }
-        .chat-container {
-            border: 1px solid #ccc;
-            padding: 10px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        #chat-output {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin-bottom: 10px;
-        }
-        .message {
-            margin: 5px 0;
-        }
-        .options {
-            margin-top: 10px;
-        }
-        .datetime-picker {
-            margin-top: 10px;
-        }
-        a.download-link {
-            color: #ff7273;
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Provider Calendar</h1>
     <div class="calendar-and-chat-container">
         <div class="calendar-container">
             <div id="searchable-calendar-container">
-                <h3>Current Month Calendar</h3>
+                <h3 id="calendar-month-name"></h3>
                 <div id="searchable-calendar"></div>
             </div>
             <div id="calendar"></div>
