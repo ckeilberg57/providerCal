@@ -95,17 +95,18 @@
             const randomNumbers = Math.floor(Math.random() * 10000);
             const consultationUrl = `https://example.com/webapp/m/ph${randomNumbers}&role=guest`;
 
-            // Add appointment to calendar
+            // Notify parent to add appointment to calendar
             window.parent.addAppointmentToCalendar(date, time, `Your provider consultation is booked`, consultationUrl);
 
             // Generate .ics file
             const icsContent = generateICS(date, time, consultationUrl);
-            displayMessage('Great, your consultation is booked. Please download the .ics file below.', 'bot');
             const downloadLink = document.createElement('a');
             downloadLink.href = `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
             downloadLink.download = 'consultation.ics';
             downloadLink.innerText = 'Download .ics file';
             chatOutput.appendChild(downloadLink);
+
+            displayMessage('Great, your consultation is booked.', 'bot');
         }
 
         function generateICS(date, time, url) {
