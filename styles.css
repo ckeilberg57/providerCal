@@ -16,8 +16,6 @@ body {
 
 /* Calendar container styles */
 .calendar-container {
-    width: 5in; /* Fixed width for calendar */
-    height: 3.5in; /* Fixed height for calendar */
     background-color: #0a2136; /* Background color for calendar */
     color: white;
     padding: 10px;
