@@ -107,20 +107,31 @@
         function showDateTimePicker() {
             const datetimeDiv = document.createElement('div');
             datetimeDiv.className = 'datetime-picker';
-
+        
+            // Get current date and time
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0]; // YYYY-MM-DD
+            const currentTime = now.toTimeString().split(' ')[0].slice(0, 5); // HH:MM
+        
+            // Create date input with default value
             const dateInput = document.createElement('input');
             dateInput.type = 'date';
+            dateInput.value = currentDate; // Set default date
             datetimeDiv.appendChild(dateInput);
-
+        
+            // Create time input with default value
             const timeInput = document.createElement('input');
             timeInput.type = 'time';
+            timeInput.value = currentTime; // Set default time
             datetimeDiv.appendChild(timeInput);
-
+        
+            // Create save button
             const saveBtn = document.createElement('button');
             saveBtn.innerText = 'Save Consultation';
             saveBtn.addEventListener('click', () => saveConsultation(dateInput.value, timeInput.value));
             datetimeDiv.appendChild(saveBtn);
-
+        
+            // Append datetime picker to chat output
             chatOutput.appendChild(datetimeDiv);
         }
 
