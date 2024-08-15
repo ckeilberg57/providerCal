@@ -7,6 +7,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #0a2136;
+            color: white;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -36,7 +38,7 @@
             padding: 10px;
             box-sizing: border-box;
             overflow: auto;
-            background: white;
+            background: #0a2136;
         }
         #searchable-calendar {
             display: grid;
@@ -49,16 +51,17 @@
         }
         #searchable-calendar .header {
             font-weight: bold;
-            background: #f0f0f0;
+            background: #0ebec7;
+            color: white;
         }
         .day {
             cursor: pointer;
         }
         .day:hover {
-            background: #e0e0e0;
+            background: #1e2a38;
         }
         #appointment-list {
-            margin-top: 5in; /* Ensure appointments are below the calendar */
+            margin-top: 3.5in; /* Ensure appointments are below the calendar */
         }
         .chat-container {
             border: 1px solid #ccc;
@@ -85,6 +88,18 @@
             color: #ff7273;
             text-decoration: none;
         }
+        button {
+            background-color: #0ebec7;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #0a9d9d;
+        }
     </style>
 </head>
 <body>
@@ -92,7 +107,7 @@
     <div class="calendar-and-chat-container">
         <div class="calendar-container">
             <div id="searchable-calendar-container">
-                <h3>Searchable Provider Calendar</h3>
+                <h3 id="calendar-month-name"></h3>
                 <div id="searchable-calendar"></div>
             </div>
             <div id="calendar"></div>
