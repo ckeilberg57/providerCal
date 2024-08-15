@@ -35,7 +35,7 @@ function displayCalendar(month, year) {
         dayDiv.className = 'day';
 
         // Check if there are appointments on this day
-        const dateStr = ${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')};
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         if (appointments[dateStr]) {
             const dot = document.createElement('span');
             dot.className = 'appointment-dot';
@@ -49,20 +49,20 @@ function displayCalendar(month, year) {
         calendarContainer.appendChild(dayDiv);
     }
 
-    currentMonthDisplay.innerText = ${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year};
+    currentMonthDisplay.innerText = `${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}`;
 }
 
 function displayAppointments(dateStr) {
-    appointmentList.innerHTML = <h3>Appointments for ${dateStr}:</h3>;
+    appointmentList.innerHTML = `<h3>Appointments for ${dateStr}:</h3>`;
     const appointmentDetails = appointments[dateStr];
     if (appointmentDetails && appointmentDetails.length > 0) {
         appointmentDetails.forEach(app => {
             const appDiv = document.createElement('div');
-            appDiv.innerHTML = <p><strong>${app.time}</strong>: ${app.details} <a href="${app.url}" class="download-link">Join</a></p>;
+            appDiv.innerHTML = `<p><strong>${app.time}</strong>: ${app.details} <a href="${app.url}" class="download-link">Join</a></p>`;
             appointmentList.appendChild(appDiv);
         });
     } else {
-        appointmentList.innerHTML += <p>No appointments scheduled for this day.</p>;
+        appointmentList.innerHTML += `<p>No appointments scheduled for this day.</p>`;
     }
 }
 
@@ -89,7 +89,7 @@ displaySearchableCalendar(currentMonth, currentYear);
 
 // Expose addAppointmentToCalendar function globally
 window.addAppointmentToCalendar = function(date, time, details, url) {
-    const dateStr = ${date};
+    const dateStr = `${date}`;
     if (!appointments[dateStr]) {
         appointments[dateStr] = [];
     }
@@ -99,55 +99,3 @@ window.addAppointmentToCalendar = function(date, time, details, url) {
     displaySearchableCalendar(currentMonth, currentYear);
     displayAppointments(dateStr);
 };
-
-// Add this function to the existing calendar script
-window.removeAppointmentFromCalendar = function(date, time) {
-    const dateStr = ${date}T${time};
-    if (appointments[dateStr]) {
-        // Remove the appointment from the appointments object
-        appointments[dateStr] = appointments[dateStr].filter(app => app.time !== time);
-        if (appointments[dateStr].length === 0) {
-            delete appointments[dateStr];
-        }
-        // Re-render the appointments and calendar
-        displayAppointments(dateStr);
-        displaySearchableCalendar(currentMonth, currentYear);
-    }
-};
-
-function cancelAppointment(dateStr, index) {
-    // Remove appointment from calendar and currentAppointments
-    if (window.parent && typeof window.parent.removeAppointmentFromCalendar === 'function') {
-        window.parent.removeAppointmentFromCalendar(dateStr, currentAppointments[dateStr][index].time);
-    }
-    
-    // Remove the appointment from currentAppointments
-    currentAppointments[dateStr].splice(index, 1);
-    if (currentAppointments[dateStr].length === 0) {
-        delete currentAppointments[dateStr];
-    }
-    
-    // Update the calendar icon
-    if (window.parent && typeof window.parent.updateCalendarIcon === 'function') {
-        window.parent.updateCalendarIcon(dateStr);
-    }
-    
-    // Display confirmation
-    displayMessage('Appointment canceled.');
-    chatOutput.innerHTML = ''; // Clear chat output
-}
-
-function updateCalendarIcon(dateStr) {
-    const appointments = window.parent.appointments[dateStr] || [];
-    
-    // Find the icon element for the specific date
-    const dateElement = document.querySelector([data-date='${dateStr}']);
-    
-    if (dateElement) {
-        if (appointments.length > 0) {
-            dateElement.classList.add('has-appointments');
-        } else {
-            dateElement.classList.remove('has-appointments');
-        }
-    }
-}
