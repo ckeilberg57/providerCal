@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const calendar = document.getElementById('calendar');
     const appointmentList = document.getElementById('appointment-list');
     const searchableCalendar = document.getElementById('searchable-calendar');
+    const calendarMonthName = document.getElementById('calendar-month-name');
     const appointments = {};
 
     function displayCalendar() {
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const year = now.getFullYear();
         const day = now.getDate();
 
+        calendarMonthName.textContent = `${month} ${year}`;
         calendar.innerHTML = `<h2>${month} ${year}</h2>`;
         appointmentList.innerHTML = `<h3>Appointments for ${month} ${day}, ${year}:</h3>`;
         displayAppointments(now.toISOString().split('T')[0]);
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (appointmentDetails && appointmentDetails.length > 0) {
             appointmentDetails.forEach(app => {
                 const appDiv = document.createElement('div');
-                appDiv.innerHTML = `<p><strong>${app.time}</strong>: ${app.details} <a href="${app.url}">Join</a></p>`;
+                appDiv.innerHTML = `<p><strong>${app.time}</strong>: ${app.details} <a href="${app.url}" class="download-link">Join</a></p>`;
                 appointmentList.appendChild(appDiv);
             });
         } else {
@@ -61,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         renderCalendar(currentMonth, currentYear);
 
-        // Add navigation buttons (optional)
+        // Add navigation buttons
         const navButtons = document.createElement('div');
         navButtons.innerHTML = `
             <button onclick="changeMonth(-1)">Previous</button>
@@ -79,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentYear++;
             }
             renderCalendar(currentMonth, currentYear);
+            calendarMonthName.textContent = `${new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} ${currentYear}`;
         };
     }
 
