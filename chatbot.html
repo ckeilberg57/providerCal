@@ -40,6 +40,19 @@
         input, button {
             margin-top: 5px;
         }
+        #reset-chat-button {
+            display: none; /* Initially hidden */
+            background-color: #0eb3c7;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        #reset-chat-button:hover {
+            background-color: #0a2136;
+        }
     </style>
 </head>
 <body>
@@ -47,12 +60,14 @@
         <div id="chat-output"></div>
         <input type="text" id="chat-input" placeholder="Type your message here" />
         <button id="send-btn">Send</button>
+        <button id="reset-chat-button">Reset Chat</button>
     </div>
 
     <script>
         const chatOutput = document.getElementById('chat-output');
         const chatInput = document.getElementById('chat-input');
         const sendBtn = document.getElementById('send-btn');
+        const resetBtn = document.getElementById('reset-chat-button');
 
         sendBtn.addEventListener('click', handleChat);
         chatInput.addEventListener('keypress', function(event) {
@@ -139,6 +154,7 @@
             displayDownloadLink(icsContent);
 
             displayMessage('Great, your consultation is booked.');
+            resetBtn.style.display = 'block'; // Show the reset button
         }
 
         function generateICS(date, time, url) {
@@ -169,6 +185,11 @@ END:VCALENDAR
             link.className = 'download-link';
             chatOutput.appendChild(link);
         }
+
+        resetBtn.addEventListener('click', () => {
+            chatOutput.innerHTML = ''; // Clear the chat output
+            resetBtn.style.display = 'none'; // Hide the reset button
+        });
     </script>
 </body>
 </html>
