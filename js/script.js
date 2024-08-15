@@ -136,3 +136,18 @@ function cancelAppointment(dateStr, index) {
     displayMessage('Appointment canceled.');
     chatOutput.innerHTML = ''; // Clear chat output
 }
+
+function updateCalendarIcon(dateStr) {
+    const appointments = window.parent.appointments[dateStr] || [];
+    
+    // Find the icon element for the specific date
+    const dateElement = document.querySelector(`[data-date='${dateStr}']`);
+    
+    if (dateElement) {
+        if (appointments.length > 0) {
+            dateElement.classList.add('has-appointments');
+        } else {
+            dateElement.classList.remove('has-appointments');
+        }
+    }
+}
