@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const calendar = document.getElementById('calendar');
     const appointmentList = document.getElementById('appointment-list');
+    const searchableCalendar = document.getElementById('searchable-calendar');
     const appointments = {};
 
     function displayCalendar() {
@@ -28,13 +29,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    window.addAppointmentToCalendar = function(date, time, details, url) {
-        if (!appointments[date]) {
-            appointments[date] = [];
-        }
-        appointments[date].push({ time, details, url });
-        displayAppointments(date);
-    };
+    function displaySearchableCalendar() {
+        const now = new Date();
+        let currentMonth = now.getMonth();
+        let currentYear = now.getFullYear();
 
-    displayCalendar();
-});
+        function renderCalendar(month, year) {
+            searchableCalendar.innerHTML = `<h4>${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}</h4>`;
+            // Placeholder for rendering days (if needed, add a day grid and clickable days)
+        }
+
+        renderCalendar(currentMonth, currentYear);
+
+        // You can add buttons
