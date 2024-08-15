@@ -5,21 +5,86 @@ body {
     padding: 0;
 }
 
+/* Container for calendar and chatbot */
 .calendar-and-chat-container {
     display: flex;
     justify-content: space-between;
+    height: 100vh; /* Ensure full height */
 }
 
+/* Calendar container styles */
 .calendar-container {
-    width: calc(100% - 4in);
+    width: calc(100% - 4in); /* Adjust width based on iframe size */
     padding: 10px;
+    background-color: #0a2136; /* Background color for calendar */
+    color: white;
+    box-sizing: border-box;
 }
 
+#calendar-month-name {
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Navigation buttons for calendar */
+#calendar-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#calendar-navigation button {
+    border: 1px solid #0eb3c7;
+    color: white;
+    background-color: transparent;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#calendar-navigation button:hover {
+    background-color: #0eb3c7;
+}
+
+/* Calendar grid styles */
+#searchable-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.day, .empty {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.day {
+    cursor: pointer;
+    border: 1px solid #0eb3c7;
+}
+
+.day:hover {
+    background-color: #0eb3c7;
+}
+
+.empty {
+    background-color: #0a2136; /* Match the container background color */
+}
+
+/* Chatbot container styles */
 .chatbot-container {
-    width: 4in;
-    height: 6in;
+    width: 4in; /* Width of iframe */
+    height: 6in; /* Height of iframe */
     border: 1px solid #ccc;
-    background-color: #0a2136;
+    background-color: #0a2136; /* Background color for chatbot */
     color: white;
     display: flex;
     flex-direction: column;
@@ -37,6 +102,7 @@ body {
     flex: 1;
     padding: 10px;
     overflow-y: auto;
+    background-color: #0a2136; /* Match the chatbot container background */
 }
 
 #chat-output {
@@ -89,68 +155,7 @@ body {
     background-color: #0eb3c7;
 }
 
-#calendar-navigation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#calendar-navigation button {
-    border: 1px solid #0eb3c7;
-    color: white;
-    background-color: transparent;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-#calendar-navigation button:hover {
-    background-color: #0eb3c7;
-}
-
-#calendar-month-name {
-    flex-grow: 1;
-    text-align: center;
-    color: white;
-}
-
-#searchable-calendar-container {
-    background-color: #0a2136;
-    color: white;
-}
-
-#searchable-calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 1px;
-}
-
-.row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-}
-
-.day, .empty {
-    width: 100%;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.day {
-    cursor: pointer;
-    border: 1px solid #0eb3c7;
-}
-
-.day:hover {
-    background-color: #0eb3c7;
-}
-
-.empty {
-    background-color: #0a2136;
-}
-
+/* Appointments list styles */
 #appointment-list {
     margin-top: 10px;
 }
