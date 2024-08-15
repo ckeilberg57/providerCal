@@ -3,6 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #0a2136; /* Overall background color */
 }
 
 /* Container for calendar and chatbot */
@@ -10,15 +11,16 @@ body {
     display: flex;
     justify-content: space-between;
     height: 100vh;
+    padding: 10px;
 }
 
 /* Calendar container styles */
 .calendar-container {
     width: 5in; /* Fixed width for calendar */
     height: 3.5in; /* Fixed height for calendar */
-    padding: 10px;
     background-color: #0a2136; /* Background color for calendar */
     color: white;
+    padding: 10px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -34,7 +36,7 @@ body {
 #calendar-navigation {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    margin-bottom: 10px;
 }
 
 #calendar-navigation button {
@@ -56,7 +58,6 @@ body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
-    margin-top: 10px;
 }
 
 .day, .empty {
@@ -78,13 +79,13 @@ body {
 }
 
 .empty {
-    background-color: #0a2136; /* Match the container background color */
+    background-color: #0a2136;
 }
 
 /* Chatbot container styles */
 .chatbot-container {
-    width: 4in; /* Width of iframe */
-    height: 6in; /* Height of iframe */
+    width: 4in; /* Width of chatbot container */
+    height: 6in; /* Height of chatbot container */
     border: 1px solid #ccc;
     background-color: #0a2136; /* Background color for chatbot */
     color: white;
@@ -167,4 +168,5 @@ body {
     list-style: none;
     padding: 0;
     margin: 0;
+    color: white;
 }
