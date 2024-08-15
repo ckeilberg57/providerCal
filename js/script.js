@@ -99,3 +99,21 @@ window.addAppointmentToCalendar = function(date, time, details, url) {
     displaySearchableCalendar(currentMonth, currentYear);
     displayAppointments(dateStr);
 };
+
+function removeAppointmentFromCalendar(dateStr, time) {
+    if (appointments[dateStr]) {
+        // Remove the specific appointment
+        appointments[dateStr] = appointments[dateStr].filter(app => app.time !== time);
+        
+        // If no appointments remain for that date, remove the green dot
+        if (appointments[dateStr].length === 0) {
+            delete appointments[dateStr];
+        }
+        
+        // Update the calendar and appointment list
+        displaySearchableCalendar(currentMonth, currentYear);
+        if (currentAppointments[dateStr]) {
+            delete currentAppointments[dateStr];
+        }
+    }
+}
