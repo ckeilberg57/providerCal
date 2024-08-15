@@ -14,22 +14,21 @@ function displayCalendar(month, year) {
 
     calendarContainer.innerHTML = '';
 
-    // Add header row for days of the week
-    const headerRow = document.createElement('div');
-    headerRow.className = 'header';
+    // Header Row for days of the week
     ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
         const dayDiv = document.createElement('div');
         dayDiv.innerText = day;
-        headerRow.appendChild(dayDiv);
+        dayDiv.className = 'header';
+        calendarContainer.appendChild(dayDiv);
     });
-    calendarContainer.appendChild(headerRow);
 
-    // Add empty cells for days before the start of the month
+    // Empty cells for days before the first day of the month
     for (let i = 0; i < firstDay; i++) {
-        calendarContainer.appendChild(document.createElement('div'));
+        const emptyDiv = document.createElement('div');
+        calendarContainer.appendChild(emptyDiv);
     }
 
-    // Add cells for each day of the month
+    // Days of the month
     for (let day = 1; day <= daysInMonth; day++) {
         const dayDiv = document.createElement('div');
         dayDiv.innerText = day;
@@ -81,11 +80,14 @@ displaySearchableCalendar(currentMonth, currentYear);
 
 // Expose addAppointmentToCalendar function globally
 window.addAppointmentToCalendar = function(date, time, details, url) {
-    const dateStr = `${date}T${time}`;
+    const dateStr = `${date}`;
     if (!appointments[dateStr]) {
         appointments[dateStr] = [];
     }
     appointments[dateStr].push({ time, details, url });
-    displayAppointments(dateStr);
+    if (document.querySelector(`#searchable-calendar .day:nth-child(${date.getDate()})`)) {
+        // Call displayAppointments to update the appointment list
+        displayAppointments(dateStr);
+    }
     displaySearchableCalendar(currentMonth, currentYear);
 };
