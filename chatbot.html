@@ -70,7 +70,7 @@
             chatInput.value = '';
             if (userMessage === '') return;
 
-            displayMessage(`You: ${userMessage}`);
+            displayMessage(You: ${userMessage});
 
             if (['hello', 'hi', 'help'].includes(userMessage)) {
                 displayMessage('How may I be of assistance today? Here are some common questions:');
@@ -120,12 +120,27 @@
                 const appList = currentAppointments[dateStr];
                 appList.forEach((app, index) => {
                     const btn = document.createElement('button');
-                    btn.innerText = `${dateStr} ${app.time} - ${app.details}`;
-                    btn.addEventListener('click', () => cancelAppointment(dateStr, index));
+                    btn.innerText = ${dateStr} ${app.time} - ${app.details};
+                    btn.addEventListener('click', () => confirmCancellation(dateStr, index));
                     optionsDiv.appendChild(btn);
                 });
             });
 
+            chatOutput.appendChild(optionsDiv);
+        }
+
+        function confirmCancellation(dateStr, index) {
+            displayMessage(Are you sure you want to cancel the appointment on ${dateStr} at ${currentAppointments[dateStr][index].time}?);
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+            const yesBtn = document.createElement('button');
+            yesBtn.innerText = 'Yes';
+            yesBtn.addEventListener('click', () => cancelAppointment(dateStr, index));
+            optionsDiv.appendChild(yesBtn);
+            const noBtn = document.createElement('button');
+            noBtn.innerText = 'No';
+            noBtn.addEventListener('click', () => displayMessage('Cancellation aborted.'));
+            optionsDiv.appendChild(noBtn);
             chatOutput.appendChild(optionsDiv);
         }
 
@@ -134,111 +149,93 @@
             if (window.parent && typeof window.parent.removeAppointmentFromCalendar === 'function') {
                 window.parent.removeAppointmentFromCalendar(dateStr, currentAppointments[dateStr][index].time);
             }
-
-            // Remove the appointment from the currentAppointments list
             currentAppointments[dateStr].splice(index, 1);
-
-            // If there are no more appointments for this date, remove the date from currentAppointments
             if (currentAppointments[dateStr].length === 0) {
                 delete currentAppointments[dateStr];
-                // Also remove the green dot from the calendar view
-                if (window.parent && typeof window.parent.removeGreenDotFromCalendar === 'function') {
-                    window.parent.removeGreenDotFromCalendar(dateStr);
-                }
             }
-
             displayMessage('Appointment canceled.');
         }
 
         function showDateTimePicker() {
-            const pickerDiv = document.createElement('div');
-            pickerDiv.className = 'datetime-picker';
+            const datetimeDiv = document.createElement('div');
+            datetimeDiv.className = 'datetime-picker';
 
+            // Get current date and time
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0]; // YYYY-MM-DD
+            const currentTime = now.toTimeString().split(' ')[0].slice(0, 5); // HH:MM
+
+            // Create date input with default value
             const dateInput = document.createElement('input');
             dateInput.type = 'date';
-            pickerDiv.appendChild(dateInput);
+            dateInput.value = currentDate; // Set default date
+            datetimeDiv.appendChild(dateInput);
 
+            // Create time input with default value
             const timeInput = document.createElement('input');
             timeInput.type = 'time';
-            pickerDiv.appendChild(timeInput);
+            timeInput.value = currentTime; // Set default time
+            datetimeDiv.appendChild(timeInput);
 
+            // Create save button
             const saveBtn = document.createElement('button');
-            saveBtn.innerText = 'Save Appointment';
-            saveBtn.addEventListener('click', () => {
-                const date = dateInput.value;
-                const time = timeInput.value;
-                saveAppointment(date, time);
-            });
-            pickerDiv.appendChild(saveBtn);
+            saveBtn.innerText = 'Save Consultation';
+            saveBtn.addEventListener('click', () => saveConsultation(dateInput.value, timeInput.value));
+            datetimeDiv.appendChild(saveBtn);
 
-            chatOutput.appendChild(pickerDiv);
+            // Append datetime picker to chat output
+            chatOutput.appendChild(datetimeDiv);
         }
 
-        function saveAppointment(date, time) {
-            if (!date || !time) {
-                displayMessage('Please select a valid date and time.');
-                return;
+        function saveConsultation(date, time) {
+            const randomNumbers = Math.floor(Math.random() * 10000);
+            const consultationUrl = https://example.com/webapp/m/ph${randomNumbers}&role=guest;
+
+            // Add appointment to calendar on the parent window
+            if (window.parent && typeof window.parent.addAppointmentToCalendar === 'function') {
+                window.parent.addAppointmentToCalendar(date, time, Your provider consultation is booked, consultationUrl);
             }
 
-            const details = 'Your provider consultation is booked';
-            const appointment = { date, time, details };
-            const dateStr = date;
-
-            if (!currentAppointments[dateStr]) {
-                currentAppointments[dateStr] = [];
+            // Store the appointment
+            if (!currentAppointments[date]) {
+                currentAppointments[date] = [];
             }
-            currentAppointments[dateStr].push(appointment);
+            currentAppointments[date].push({ time, details: 'Your provider consultation is booked', url: consultationUrl });
+
+            // Generate .ics file
+            const icsContent = generateICS(date, time, consultationUrl);
+            displayDownloadLink(icsContent);
 
             displayMessage('Great, your consultation is booked.');
-
-            const icsLink = createICSFile(date, time);
-            displayICSDownloadLink(icsLink);
-
-            if (window.parent && typeof window.parent.addAppointmentToCalendar === 'function') {
-                window.parent.addAppointmentToCalendar(appointment);
-            }
-
-            showResetChatButton();
         }
 
-        function showResetChatButton() {
-            const resetBtn = document.createElement('button');
-            resetBtn.innerText = 'Reset Chat';
-            resetBtn.addEventListener('click', resetChat);
-            chatOutput.appendChild(resetBtn);
-        }
-
-        function resetChat() {
-            chatOutput.innerHTML = '';
-            displayMessage('Chat reset. How may I assist you today?');
-            displayOptions(['Book a consultation', 'Speak to a nurse', 'Cancel a consultation']);
-        }
-
-        function createICSFile(date, time) {
-            const icsContent = `BEGIN:VCALENDAR
+        function generateICS(date, time, url) {
+            const event = 
+BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Your Organization//NONSGML v1.0//EN
 BEGIN:VEVENT
-UID:${new Date().getTime()}@yourdomain.com
-DTSTAMP:${date}T${time}Z
-DTSTART:${date}T${time}Z
+UID:${Date.now()}
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '')}
+DTSTART:${date.replace(/-/g, '')}T${time.replace(/:/g, '')}00Z
 SUMMARY:Your provider consultation is booked
-DESCRIPTION:Visit https://example.com/webapp/m/ph${Math.floor(Math.random() * 10000)}&role=guest
+DESCRIPTION:Your provider consultation is booked. Join at ${url}
+URL:${url}
 END:VEVENT
-END:VCALENDAR`;
-
-            const blob = new Blob([icsContent], { type: 'text/calendar' });
-            const url = URL.createObjectURL(blob);
-            return url;
+END:VCALENDAR
+            .trim();
+            return event;
         }
 
-        function displayICSDownloadLink(link) {
-            const linkElement = document.createElement('a');
-            linkElement.href = link;
-            linkElement.download = 'appointment.ics';
-            linkElement.className = 'download-link';
-            linkElement.innerHTML = 'Please download your appointment here: <span>&#128197;</span> appointment.ics';
-            chatOutput.appendChild(linkElement);
+        function displayDownloadLink(content) {
+            const blob = new Blob([content], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'appointment.ics';
+            link.innerText = 'Download .ics file';
+            link.className = 'download-link';
+            chatOutput.appendChild(link);
         }
     </script>
 </body>
