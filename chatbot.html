@@ -4,50 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulated Patient Booking Portal</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0a2136;
-            color: white;
-            margin: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        #chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            padding: 10px;
-        }
-        #chat-output {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin-bottom: 10px;
-        }
-        #message-input {
-            display: flex;
-        }
-        #message {
-            flex-grow: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        #send-button {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #0eb3c7;
-            color: white;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        #send-button:hover {
-            background-color: #0a9fb1;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="chat-container">
@@ -65,15 +22,45 @@
             const messageInput = document.getElementById('message');
             const chatOutput = document.getElementById('chat-output');
 
+            function appendMessage(text, sender = 'user') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                messageDiv.textContent = text;
+                chatOutput.appendChild(messageDiv);
+                chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to bottom
+            }
+
             function sendMessage() {
                 const messageText = messageInput.value.trim();
                 if (messageText) {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = 'message';
-                    messageDiv.textContent = messageText;
-                    chatOutput.appendChild(messageDiv);
+                    appendMessage(messageText);
                     messageInput.value = '';
-                    chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to bottom
+
+                    // Simulate response
+                    setTimeout(() => {
+                        let responseText = '';
+
+                        switch (messageText.toLowerCase()) {
+                            case 'hello':
+                            case 'hi':
+                            case 'help':
+                                responseText = 'How may I be of assistance today? Here are some common questions: Book a consultation, Speak to a nurse, Cancel a consultation.';
+                                break;
+                            case 'book a consultation':
+                            case 'speak to a nurse':
+                                responseText = 'Great, let me assist in booking an appointment.';
+                                // Add DateTime picker in actual implementation
+                                break;
+                            case 'cancel a consultation':
+                                responseText = 'Consultation cancellation is not yet supported.';
+                                break;
+                            default:
+                                responseText = 'Sorry, I did not understand that. Please choose one of the options provided.';
+                                break;
+                        }
+
+                        appendMessage(responseText, 'bot');
+                    }, 1000); // Simulate delay
                 }
             }
 
