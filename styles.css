@@ -89,9 +89,12 @@ button:hover {
 
 .chatbot-container {
     flex: 1;
+    width: 4in;
+    height: 6in;
     border: 1px solid #0eb3c7;
     padding: 10px;
     background-color: #1e2a38;
+    box-sizing: border-box;
 }
 
 .chat-container {
