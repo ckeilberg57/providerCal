@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-output {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .options {
+            margin-top: 10px;
+        }
+        .datetime-picker {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-output"></div>
+        <input type="text" id="chat-input" placeholder="Type your message here" />
+        <button id="send-btn">Send</button>
+    </div>
+
+    <script>
+        const chatOutput = document.getElementById('chat-output');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        sendBtn.addEventListener('click', handleChat);
+
+        function handleChat() {
+            const userMessage = chatInput.value.trim().toLowerCase();
+            chatInput.value = '';
+            if (userMessage === '') return;
+
+            displayMessage(`You: ${userMessage}`);
+
+            if (['hello', 'hi', 'help'].includes(userMessage)) {
+                displayMessage('How may I be of assistance today? Here are some common questions:');
+                displayOptions(['Book a consultation', 'Speak to a nurse', 'Cancel a consultation']);
+            }
+        }
+
+        function displayMessage(message) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+            msgDiv.innerText = message;
+            chatOutput.appendChild(msgDiv);
+        }
+
+        function displayOptions(options) {
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.innerText = option;
+                btn.addEventListener('click', () => handleOptionSelection(option));
+                optionsDiv.appendChild(btn);
+            });
+            chatOutput.appendChild(optionsDiv);
+        }
+
+        function handleOptionSelection(option) {
+            if (option === 'Book a consultation' || option === 'Speak to a nurse') {
+                displayMessage('Great, let me assist in booking an appointment.');
+                showDateTimePicker();
+            }
+        }
+
+        function showDateTimePicker() {
+            const datetimeDiv = document.createElement('div');
+            datetimeDiv.className = 'datetime-picker';
+
+            const dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            datetimeDiv.appendChild(dateInput);
+
+            const timeInput = document.createElement('input');
+            timeInput.type = 'time';
+            datetimeDiv.appendChild(timeInput);
+
+            const saveBtn = document.createElement('button');
+            saveBtn.innerText = 'Save Consultation';
+            saveBtn.addEventListener('click', () => saveConsultation(dateInput.value, timeInput.value));
+            datetimeDiv.appendChild(saveBtn);
+
+            chatOutput.appendChild(datetimeDiv);
+        }
+
+        function saveConsultation(date, time) {
+            const randomNumbers = Math.floor(Math.random() * 10000);
+            const consultationUrl = `https://example.com/webapp/m/ph${randomNumbers}&role=guest`;
+
+            // Add appointment to calendar
+            window.parent.addAppointmentToCalendar(date, time, `Your provider consultation is booked`, consultationUrl);
+
+            // Generate .ics file
+            const icsContent = generateICS(date, time, consultationUrl);
+            downloadICS(icsContent);
+
+            displayMessage('Great, your consultation is booked.');
+        }
+
+        function generateICS(date, time, url) {
+            const event = `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Organization//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:${Date.now()}
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '')}
+DTSTART:${date.replace(/-/g, '')}T${time.replace(/:/g, '')}00Z
+SUMMARY:Your provider consultation is booked
+DESCRIPTION:Your provider consultation is booked. Join at ${url}
+URL:${url}
+END:VEVENT
+END:VCALENDAR
+            `.trim();
+            return event;
+        }
+
+        function downloadICS(content) {
+            const blob = new Blob([content], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'consultation.ics';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
