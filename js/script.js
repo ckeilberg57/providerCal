@@ -85,9 +85,8 @@ window.addAppointmentToCalendar = function(date, time, details, url) {
         appointments[dateStr] = [];
     }
     appointments[dateStr].push({ time, details, url });
-    if (document.querySelector(`#searchable-calendar .day:nth-child(${date.getDate()})`)) {
-        // Call displayAppointments to update the appointment list
-        displayAppointments(dateStr);
-    }
+    
+    // Update calendar and appointment list
     displaySearchableCalendar(currentMonth, currentYear);
+    displayAppointments(dateStr);
 };
