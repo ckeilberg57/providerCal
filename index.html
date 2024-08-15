@@ -40,6 +40,7 @@
         #searchable-calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr); /* 7 columns for days of the week */
+            grid-template-rows: auto repeat(6, 1fr); /* 1 row for header, 6 rows for calendar days */
             gap: 1px;
             background-color: #0a2136;
         }
@@ -47,11 +48,11 @@
             background: #0ebec7;
             color: white;
             font-weight: bold;
-            padding: 5px;
+            padding: 10px;
             text-align: center;
         }
         #searchable-calendar .day {
-            padding: 5px;
+            padding: 10px;
             text-align: center;
             cursor: pointer;
             color: white;
