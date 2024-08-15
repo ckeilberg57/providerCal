@@ -25,6 +25,13 @@
 
         sendBtn.addEventListener('click', handleChat);
 
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleChat();
+            }
+        });
+
         function handleChat() {
             const userMessage = chatInput.value.trim().toLowerCase();
             chatInput.value = '';
