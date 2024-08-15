@@ -3,52 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
+    <title>Simulated Patient Booking Portal</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .chat-header {
-            background-color: #0eb3c7;
+            background-color: #0a2136;
             color: white;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
+            margin: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
-        .chat-container {
+        #chat-container {
             display: flex;
             flex-direction: column;
             height: 100%;
+            padding: 10px;
         }
         #chat-output {
             flex-grow: 1;
             overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        #message-input {
+            display: flex;
+        }
+        #message {
+            flex-grow: 1;
             padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
         }
-        .message {
-            margin: 5px 0;
+        #send-button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0eb3c7;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
         }
-        .options {
-            margin-top: 10px;
-        }
-        .datetime-picker {
-            margin-top: 10px;
+        #send-button:hover {
+            background-color: #0a9fb1;
         }
     </style>
 </head>
 <body>
-    <div class="chat-header">Simulated Patient Booking Portal</div>
-    <div class="chat-container">
+    <div id="chat-container">
         <div id="chat-output">
-            <!-- Chat messages will be dynamically inserted here -->
+            <div class="message">Simulated Patient Booking Portal</div>
         </div>
-        <div id="chat-input">
-            <input type="text" id="user-input" placeholder="Type your message..." />
-            <button id="send-btn">Send</button>
+        <div id="message-input">
+            <input type="text" id="message" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
         </div>
     </div>
-    <script src="chatbot.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sendButton = document.getElementById('send-button');
+            const messageInput = document.getElementById('message');
+            const chatOutput = document.getElementById('chat-output');
+
+            function sendMessage() {
+                const messageText = messageInput.value.trim();
+                if (messageText) {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'message';
+                    messageDiv.textContent = messageText;
+                    chatOutput.appendChild(messageDiv);
+                    messageInput.value = '';
+                    chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to bottom
+                }
+            }
+
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
