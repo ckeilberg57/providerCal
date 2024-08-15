@@ -33,10 +33,19 @@ function displayCalendar(month, year) {
         const dayDiv = document.createElement('div');
         dayDiv.innerText = day;
         dayDiv.className = 'day';
+
+        // Check if there are appointments on this day
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        if (appointments[dateStr]) {
+            const dot = document.createElement('span');
+            dot.className = 'appointment-dot';
+            dayDiv.appendChild(dot);
+        }
+
         dayDiv.addEventListener('click', () => {
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             displayAppointments(dateStr);
         });
+
         calendarContainer.appendChild(dayDiv);
     }
 
