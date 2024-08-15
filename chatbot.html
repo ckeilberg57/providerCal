@@ -30,7 +30,7 @@
         .options {
             margin-top: 10px;
         }
-        .datetime-picker {
+        .datetime-picker, .appointment-list, .confirmation {
             margin-top: 10px;
         }
         a.download-link {
@@ -40,19 +40,6 @@
         input, button {
             margin-top: 5px;
         }
-        #reset-chat-button {
-            display: none; /* Initially hidden */
-            background-color: #0eb3c7;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        #reset-chat-button:hover {
-            background-color: #0a2136;
-        }
     </style>
 </head>
 <body>
@@ -60,14 +47,12 @@
         <div id="chat-output"></div>
         <input type="text" id="chat-input" placeholder="Type your message here" />
         <button id="send-btn">Send</button>
-        <button id="reset-chat-button">Reset Chat</button>
     </div>
 
     <script>
         const chatOutput = document.getElementById('chat-output');
         const chatInput = document.getElementById('chat-input');
         const sendBtn = document.getElementById('send-btn');
-        const resetBtn = document.getElementById('reset-chat-button');
 
         sendBtn.addEventListener('click', handleChat);
         chatInput.addEventListener('keypress', function(event) {
@@ -113,6 +98,8 @@
             if (option === 'Book a consultation' || option === 'Speak to a nurse') {
                 displayMessage('Great, let me assist in booking an appointment.');
                 showDateTimePicker();
+            } else if (option === 'Cancel a consultation') {
+                displayAppointmentsList();
             }
         }
 
@@ -137,24 +124,17 @@
         }
 
         function saveConsultation(date, time) {
-            console.log(`Saving consultation for ${date} ${time}`); // Debug log
             const randomNumbers = Math.floor(Math.random() * 10000);
             const consultationUrl = `https://example.com/webapp/m/ph${randomNumbers}&role=guest`;
 
-            // Add appointment to calendar on the parent window
             if (window.parent && typeof window.parent.addAppointmentToCalendar === 'function') {
-                console.log('Calling addAppointmentToCalendar in parent'); // Debug log
                 window.parent.addAppointmentToCalendar(date, time, `Your provider consultation is booked`, consultationUrl);
-            } else {
-                console.error('addAppointmentToCalendar function not found in parent window'); // Error log
             }
 
-            // Generate .ics file
             const icsContent = generateICS(date, time, consultationUrl);
             displayDownloadLink(icsContent);
 
             displayMessage('Great, your consultation is booked.');
-            resetBtn.style.display = 'block'; // Show the reset button
         }
 
         function generateICS(date, time, url) {
@@ -186,10 +166,51 @@ END:VCALENDAR
             chatOutput.appendChild(link);
         }
 
-        resetBtn.addEventListener('click', () => {
-            chatOutput.innerHTML = ''; // Clear the chat output
-            resetBtn.style.display = 'none'; // Hide the reset button
-        });
+        function displayAppointmentsList() {
+            const appointmentsDiv = document.createElement('div');
+            appointmentsDiv.className = 'appointment-list';
+
+            const dateStrs = Object.keys(window.parent.appointments || {});
+            if (dateStrs.length === 0) {
+                appointmentsDiv.innerHTML = `<p>No appointments to cancel.</p>`;
+            } else {
+                appointmentsDiv.innerHTML = `<h3>Select an appointment to cancel:</h3>`;
+                dateStrs.forEach(dateStr => {
+                    window.parent.appointments[dateStr].forEach(app => {
+                        const appDiv = document.createElement('div');
+                        appDiv.innerHTML = `<p><strong>${app.time}</strong>: ${app.details} <button onclick="confirmCancellation('${dateStr}', '${app.time}')">Cancel</button></p>`;
+                        appointmentsDiv.appendChild(appDiv);
+                    });
+                });
+            }
+
+            chatOutput.appendChild(appointmentsDiv);
+        }
+
+        function confirmCancellation(dateStr, time) {
+            const confirmationDiv = document.createElement('div');
+            confirmationDiv.className = 'confirmation';
+            confirmationDiv.innerHTML = `
+                <p>Are you sure you want to cancel the appointment on ${dateStr} at ${time}?</p>
+                <button onclick="cancelAppointment('${dateStr}', '${time}')">Yes</button>
+                <button onclick="cancelConfirmation()">No</button>
+            `;
+            chatOutput.appendChild(confirmationDiv);
+        }
+
+        function cancelAppointment(dateStr, time) {
+            if (window.parent && typeof window.parent.removeAppointmentFromCalendar === 'function') {
+                window.parent.removeAppointmentFromCalendar(dateStr, time);
+            }
+
+            displayMessage('The appointment has been cancelled.');
+            chatOutput.innerHTML = ''; // Clear chat output
+        }
+
+        function cancelConfirmation() {
+            chatOutput.innerHTML = ''; // Clear confirmation
+            displayOptions(['Book a consultation', 'Speak to a nurse', 'Cancel a consultation']);
+        }
     </script>
 </body>
 </html>
