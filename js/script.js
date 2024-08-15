@@ -114,3 +114,25 @@ window.removeAppointmentFromCalendar = function(date, time) {
         displaySearchableCalendar(currentMonth, currentYear);
     }
 };
+
+function cancelAppointment(dateStr, index) {
+    // Remove appointment from calendar and currentAppointments
+    if (window.parent && typeof window.parent.removeAppointmentFromCalendar === 'function') {
+        window.parent.removeAppointmentFromCalendar(dateStr, currentAppointments[dateStr][index].time);
+    }
+    
+    // Remove the appointment from currentAppointments
+    currentAppointments[dateStr].splice(index, 1);
+    if (currentAppointments[dateStr].length === 0) {
+        delete currentAppointments[dateStr];
+    }
+    
+    // Update the calendar icon
+    if (window.parent && typeof window.parent.updateCalendarIcon === 'function') {
+        window.parent.updateCalendarIcon(dateStr);
+    }
+    
+    // Display confirmation
+    displayMessage('Appointment canceled.');
+    chatOutput.innerHTML = ''; // Clear chat output
+}
