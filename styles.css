@@ -1,170 +1,72 @@
-/* General styles */
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    background-color: #0a2136; /* Overall background color */
 }
 
-/* Container for calendar and chatbot */
-.calendar-and-chat-container {
-    display: flex;
-    justify-content: space-between;
-    height: 100vh;
-    padding: 10px;
-}
-
-/* Calendar container styles */
 .calendar-container {
-    background-color: #0a2136; /* Background color for calendar */
-    color: white;
-    padding: 10px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
 }
 
-#calendar-month-name {
-    text-align: center;
-    margin: 10px 0;
-    font-size: 1.2em;
-}
-
-/* Navigation buttons for calendar */
-#calendar-navigation {
+header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-#calendar-navigation button {
-    border: 1px solid #0eb3c7;
-    color: white;
-    background-color: transparent;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 0.9em;
-}
-
-#calendar-navigation button:hover {
-    background-color: #0eb3c7;
-}
-
-/* Calendar grid styles */
-#searchable-calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 1px;
-}
-
-.day, .empty {
-    width: 30%;
-    height: 30%;
-    display: flex;
     align-items: center;
-    justify-content: center;
-}
-
-.day {
-    cursor: pointer;
-    border: 1px solid #0eb3c7;
-    background-color: #0a2136;
-}
-
-.day:hover {
     background-color: #0eb3c7;
-}
-
-.empty {
-    background-color: #0a2136;
-}
-
-/* Chatbot container styles */
-.chatbot-container {
-    width: 4in; /* Width of chatbot container */
-    height: 6in; /* Height of chatbot container */
-    border: 1px solid #ccc;
-    background-color: #0a2136; /* Background color for chatbot */
-    color: white;
-    display: flex;
-    flex-direction: column;
-}
-
-.chatbot-header {
-    background-color: #0e2136;
     color: white;
     padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #0eb3c7;
-    font-size: 1.2em;
 }
 
-.chat-container {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-    background-color: #0a2136; /* Match the chatbot container background */
-}
-
-#chat-output {
-    margin-bottom: 10px;
-}
-
-.message {
-    margin: 5px 0;
-}
-
-.message.user {
-    text-align: right;
-}
-
-.message.bot {
-    text-align: left;
-}
-
-.options button {
-    margin-right: 5px;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #0eb3c7;
-    background-color: #0e2136;
-    color: white;
-}
-
-.options button:hover {
-    background-color: #0eb3c7;
-}
-
-.datetime-picker {
-    margin-top: 10px;
-}
-
-.datetime-picker input {
-    margin-right: 5px;
-}
-
-.datetime-picker button {
-    border: 1px solid #0eb3c7;
-    color: white;
-    background-color: transparent;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.datetime-picker button:hover {
-    background-color: #0eb3c7;
-}
-
-/* Appointments list styles */
-#appointment-list {
-    margin-top: 10px;
-}
-
-#appointment-list ul {
-    list-style: none;
-    padding: 0;
+header h1 {
     margin: 0;
+}
+
+#calendar {
+    margin-top: 20px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.close-btn {
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+button {
+    background-color: #0eb3c7;
     color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0a8b9e;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
 }
