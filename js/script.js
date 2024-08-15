@@ -11,15 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentYear = new Date().getFullYear();
 
     function displayCalendar() {
-        const now = new Date();
-        const month = now.toLocaleString('default', { month: 'long' });
-        const year = now.getFullYear();
-        const day = now.getDate();
+        const month = new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' });
+        const year = currentYear;
+        const day = new Date().getDate();
 
         calendarMonthName.textContent = `${month} ${year}`;
         calendar.innerHTML = `<h2>${month} ${year}</h2>`;
         appointmentList.innerHTML = `<h3>Appointments for ${month} ${day}, ${year}:</h3>`;
-        displayAppointments(now.toISOString().split('T')[0]);
+        displayAppointments(new Date(currentYear, currentMonth, day).toISOString().split('T')[0]);
     }
 
     function displayAppointments(dateStr) {
