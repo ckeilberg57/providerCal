@@ -35,13 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentYear = now.getFullYear();
 
         function renderCalendar(month, year) {
-            searchableCalendar.innerHTML = `<h4>${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}</h4>`;
-            
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-            let daysHtml = '<div style="display: grid; grid-template-columns: repeat(7, 1fr);">';
-            daysHtml += '<div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>';
+            let daysHtml = '<div class="header">Sun</div><div class="header">Mon</div><div class="header">Tue</div><div class="header">Wed</div><div class="header">Thu</div><div class="header">Fri</div><div class="header">Sat</div>';
 
             for (let i = 0; i < firstDay; i++) {
                 daysHtml += '<div></div>';
@@ -51,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 daysHtml += `<div class="day" data-date="${year}-${month + 1}-${day}">${day}</div>`;
             }
 
-            daysHtml += '</div>';
             searchableCalendar.innerHTML = daysHtml;
 
             const dayElements = searchableCalendar.getElementsByClassName('day');
