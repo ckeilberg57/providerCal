@@ -39,16 +39,125 @@
     </style>
 </head>
 <body>
-    <div class="chat-header">Simulated Patient Booking Portal</div>
-    <div class="chat-container">
-        <div id="chat-output">
-            <!-- Chat messages will be dynamically inserted here -->
-        </div>
-        <div id="chat-input">
-            <input type="text" id="user-input" placeholder="Type your message..." />
-            <button id="send-btn">Send</button>
+    <div class="chatbot-container">
+        <div class="chatbot-header">Simulated Patient Booking Portal</div>
+        <div class="chat-container">
+            <div id="chat-output"></div>
+            <div id="message-input">
+                <input type="text" id="chat-input" placeholder="Type your message here" />
+                <button id="send-btn">Send</button>
+            </div>
         </div>
     </div>
-    <script src="chatbot.js"></script>
+
+    <script>
+        const chatOutput = document.getElementById('chat-output');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        sendBtn.addEventListener('click', handleChat);
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleChat();
+            }
+        });
+
+        function handleChat() {
+            const userMessage = chatInput.value.trim().toLowerCase();
+            chatInput.value = '';
+            if (userMessage === '') return;
+
+            displayMessage(`You: ${userMessage}`, 'user');
+
+            if (['hello', 'hi', 'help'].includes(userMessage)) {
+                displayMessage('How may I be of assistance today? Here are some common questions:', 'bot');
+                displayOptions(['Book a consultation', 'Speak to a nurse', 'Cancel a consultation']);
+            }
+        }
+
+        function displayMessage(message, type) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${type}`;
+            msgDiv.innerText = message;
+            chatOutput.appendChild(msgDiv);
+        }
+
+        function displayOptions(options) {
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.innerText = option;
+                btn.addEventListener('click', () => handleOptionSelection(option));
+                optionsDiv.appendChild(btn);
+            });
+            chatOutput.appendChild(optionsDiv);
+        }
+
+        function handleOptionSelection(option) {
+            if (option === 'Book a consultation' || option === 'Speak to a nurse') {
+                displayMessage('Great, let me assist in booking an appointment.', 'bot');
+                showDateTimePicker();
+            }
+        }
+
+        function showDateTimePicker() {
+            const datetimeDiv = document.createElement('div');
+            datetimeDiv.className = 'datetime-picker';
+
+            const dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            datetimeDiv.appendChild(dateInput);
+
+            const timeInput = document.createElement('input');
+            timeInput.type = 'time';
+            datetimeDiv.appendChild(timeInput);
+
+            const saveBtn = document.createElement('button');
+            saveBtn.innerText = 'Save Consultation';
+            saveBtn.addEventListener('click', () => saveConsultation(dateInput.value, timeInput.value));
+            datetimeDiv.appendChild(saveBtn);
+
+            chatOutput.appendChild(datetimeDiv);
+        }
+
+        function saveConsultation(date, time) {
+            const randomNumbers = Math.floor(Math.random() * 10000);
+            const consultationUrl = `https://example.com/webapp/m/ph${randomNumbers}&role=guest`;
+
+            // Notify parent to add appointment to calendar
+            window.parent.addAppointmentToCalendar(date, time, `Your provider consultation is booked`, consultationUrl);
+
+            // Generate .ics file
+            const icsContent = generateICS(date, time, consultationUrl);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
+            downloadLink.download = 'consultation.ics';
+            downloadLink.innerText = 'Download .ics file';
+            chatOutput.appendChild(downloadLink);
+
+            displayMessage('Great, your consultation is booked.', 'bot');
+        }
+
+        function generateICS(date, time, url) {
+            const event = `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Organization//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:${Date.now()}
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '')}
+DTSTART:${date.replace(/-/g, '')}T${time.replace(/:/g, '')}00Z
+SUMMARY:Your provider consultation is booked
+DESCRIPTION:Your provider consultation is booked. Join at ${url}
+URL:${url}
+END:VEVENT
+END:VCALENDAR
+            `.trim();
+            return event;
+        }
+    </script>
 </body>
 </html>
