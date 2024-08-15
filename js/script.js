@@ -1,120 +1,153 @@
+const currentMonthDisplay = document.getElementById('calendar-month-name');
+const calendarContainer = document.getElementById('searchable-calendar');
+const previousMonthButton = document.getElementById('previous-month');
+const nextMonthButton = document.getElementById('next-month');
+const appointmentList = document.getElementById('appointment-list');
+
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 let appointments = {};
 
-document.addEventListener('DOMContentLoaded', function() {
-    const prevBtn = document.getElementById('previous-month');
-    const nextBtn = document.getElementById('next-month');
-    const monthNameElem = document.getElementById('calendar-month-name');
+function displayCalendar(month, year) {
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    let currentDate = new Date();
-    let currentMonth = currentDate.getMonth();
-    let currentYear = currentDate.getFullYear();
+    calendarContainer.innerHTML = '';
 
-    function displaySearchableCalendar(month, year) {
-        const calendarElement = document.getElementById('searchable-calendar');
-        calendarElement.innerHTML = ''; // Clear the current calendar content
+    // Header Row for days of the week
+    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+        const dayDiv = document.createElement('div');
+        dayDiv.innerText = day;
+        dayDiv.className = 'header';
+        calendarContainer.appendChild(dayDiv);
+    });
 
-        const monthStart = new Date(year, month, 1);
-        const monthEnd = new Date(year, month + 1, 0);
-        const daysInMonth = monthEnd.getDate();
-        const startDay = monthStart.getDay();
-
-        // Fill in the days of the current month
-        for (let i = 0; i < startDay; i++) {
-            calendarElement.innerHTML += '<div class="day"></div>'; // Empty cells for days of the previous month
-        }
-
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayElement = document.createElement('div');
-            dayElement.className = 'day';
-            dayElement.innerText = day;
-
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            if (appointments[dateStr] && appointments[dateStr].length > 0) {
-                const dotElement = document.createElement('span');
-                dotElement.className = 'appointment-dot';
-                dayElement.appendChild(dotElement);
-            }
-
-            dayElement.addEventListener('click', () => displayAppointments(dateStr));
-
-            calendarElement.appendChild(dayElement);
-        }
-
-        monthNameElem.innerText = monthStart.toLocaleString('default', { month: 'long' }) + ' ' + year;
+    // Empty cells for days before the first day of the month
+    for (let i = 0; i < firstDay; i++) {
+        const emptyDiv = document.createElement('div');
+        calendarContainer.appendChild(emptyDiv);
     }
 
-    function displayAppointments(dateStr) {
-        const appointmentListElement = document.getElementById('appointment-list');
-        appointmentListElement.innerHTML = '';
+    // Days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.innerText = day;
+        dayDiv.className = 'day';
 
-        if (appointments[dateStr] && appointments[dateStr].length > 0) {
-            appointments[dateStr].forEach(appointment => {
-                const appointmentElement = document.createElement('div');
-                appointmentElement.innerText = `${appointment.time} - ${appointment.details}`;
-                appointmentListElement.appendChild(appointmentElement);
-            });
-        } else {
-            appointmentListElement.innerText = 'No appointments.';
-        }
-    }
-
-    window.addAppointmentToCalendar = function(appointment) {
-        const dateStr = appointment.date;
-        if (!appointments[dateStr]) {
-            appointments[dateStr] = [];
-        }
-        appointments[dateStr].push(appointment);
-        displaySearchableCalendar(currentMonth, currentYear);
-    };
-
-    window.removeAppointmentFromCalendar = function(date, time) {
-        const dateStr = `${date}`;
+        // Check if there are appointments on this day
+        const dateStr = ${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')};
         if (appointments[dateStr]) {
-            const appointmentIndex = appointments[dateStr].findIndex(app => app.time === time);
-            if (appointmentIndex !== -1) {
-                appointments[dateStr].splice(appointmentIndex, 1);
-                if (appointments[dateStr].length === 0) {
-                    delete appointments[dateStr];
-                    removeGreenDotFromCalendar(dateStr);
-                }
-                displaySearchableCalendar(currentMonth, currentYear);
-                displayAppointments(dateStr);
-            }
+            const dot = document.createElement('span');
+            dot.className = 'appointment-dot';
+            dayDiv.appendChild(dot);
         }
-    };
 
-    window.removeGreenDotFromCalendar = function(dateStr) {
-        const dayElements = document.querySelectorAll('.day');
-        dayElements.forEach(dayElem => {
-            const dayDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(dayElem.innerText).padStart(2, '0')}`;
-            if (dayDate === dateStr) {
-                const dot = dayElem.querySelector('.appointment-dot');
-                if (dot) {
-                    dayElem.removeChild(dot);
-                }
-            }
+        dayDiv.addEventListener('click', () => {
+            displayAppointments(dateStr);
         });
-    };
 
-    prevBtn.addEventListener('click', function() {
-        if (currentMonth === 0) {
-            currentMonth = 11;
-            currentYear--;
-        } else {
-            currentMonth--;
-        }
-        displaySearchableCalendar(currentMonth, currentYear);
-    });
+        calendarContainer.appendChild(dayDiv);
+    }
 
-    nextBtn.addEventListener('click', function() {
-        if (currentMonth === 11) {
-            currentMonth = 0;
-            currentYear++;
-        } else {
-            currentMonth++;
-        }
-        displaySearchableCalendar(currentMonth, currentYear);
-    });
+    currentMonthDisplay.innerText = ${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year};
+}
 
+function displayAppointments(dateStr) {
+    appointmentList.innerHTML = <h3>Appointments for ${dateStr}:</h3>;
+    const appointmentDetails = appointments[dateStr];
+    if (appointmentDetails && appointmentDetails.length > 0) {
+        appointmentDetails.forEach(app => {
+            const appDiv = document.createElement('div');
+            appDiv.innerHTML = <p><strong>${app.time}</strong>: ${app.details} <a href="${app.url}" class="download-link">Join</a></p>;
+            appointmentList.appendChild(appDiv);
+        });
+    } else {
+        appointmentList.innerHTML += <p>No appointments scheduled for this day.</p>;
+    }
+}
+
+function displaySearchableCalendar(month, year) {
+    displayCalendar(month, year);
+}
+
+function changeMonth(increment) {
+    currentMonth += increment;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    } else if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
     displaySearchableCalendar(currentMonth, currentYear);
-});
+}
+
+previousMonthButton.addEventListener('click', () => changeMonth(-1));
+nextMonthButton.addEventListener('click', () => changeMonth(1));
+
+displaySearchableCalendar(currentMonth, currentYear);
+
+// Expose addAppointmentToCalendar function globally
+window.addAppointmentToCalendar = function(date, time, details, url) {
+    const dateStr = ${date};
+    if (!appointments[dateStr]) {
+        appointments[dateStr] = [];
+    }
+    appointments[dateStr].push({ time, details, url });
+    
+    // Update calendar and appointment list
+    displaySearchableCalendar(currentMonth, currentYear);
+    displayAppointments(dateStr);
+};
+
+// Add this function to the existing calendar script
+window.removeAppointmentFromCalendar = function(date, time) {
+    const dateStr = ${date}T${time};
+    if (appointments[dateStr]) {
+        // Remove the appointment from the appointments object
+        appointments[dateStr] = appointments[dateStr].filter(app => app.time !== time);
+        if (appointments[dateStr].length === 0) {
+            delete appointments[dateStr];
+        }
+        // Re-render the appointments and calendar
+        displayAppointments(dateStr);
+        displaySearchableCalendar(currentMonth, currentYear);
+    }
+};
+
+function cancelAppointment(dateStr, index) {
+    // Remove appointment from calendar and currentAppointments
+    if (window.parent && typeof window.parent.removeAppointmentFromCalendar === 'function') {
+        window.parent.removeAppointmentFromCalendar(dateStr, currentAppointments[dateStr][index].time);
+    }
+    
+    // Remove the appointment from currentAppointments
+    currentAppointments[dateStr].splice(index, 1);
+    if (currentAppointments[dateStr].length === 0) {
+        delete currentAppointments[dateStr];
+    }
+    
+    // Update the calendar icon
+    if (window.parent && typeof window.parent.updateCalendarIcon === 'function') {
+        window.parent.updateCalendarIcon(dateStr);
+    }
+    
+    // Display confirmation
+    displayMessage('Appointment canceled.');
+    chatOutput.innerHTML = ''; // Clear chat output
+}
+
+function updateCalendarIcon(dateStr) {
+    const appointments = window.parent.appointments[dateStr] || [];
+    
+    // Find the icon element for the specific date
+    const dateElement = document.querySelector([data-date='${dateStr}']);
+    
+    if (dateElement) {
+        if (appointments.length > 0) {
+            dateElement.classList.add('has-appointments');
+        } else {
+            dateElement.classList.remove('has-appointments');
+        }
+    }
+}
