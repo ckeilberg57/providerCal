@@ -99,3 +99,18 @@ window.addAppointmentToCalendar = function(date, time, details, url) {
     displaySearchableCalendar(currentMonth, currentYear);
     displayAppointments(dateStr);
 };
+
+// Add this function to the existing calendar script
+window.removeAppointmentFromCalendar = function(date, time) {
+    const dateStr = `${date}T${time}`;
+    if (appointments[dateStr]) {
+        // Remove the appointment from the appointments object
+        appointments[dateStr] = appointments[dateStr].filter(app => app.time !== time);
+        if (appointments[dateStr].length === 0) {
+            delete appointments[dateStr];
+        }
+        // Re-render the appointments and calendar
+        displayAppointments(dateStr);
+        displaySearchableCalendar(currentMonth, currentYear);
+    }
+};
