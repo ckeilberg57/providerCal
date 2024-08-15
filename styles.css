@@ -67,7 +67,7 @@ body {
     margin-top: 3.5in; /* Ensure appointments are below the calendar */
 }
 
-.chat-container {
+.chatbot-container {
     border: 1px solid #ccc;
     padding: 10px;
     height: 100%;
@@ -100,13 +100,13 @@ a.download-link {
 
 button {
     border: 1px solid #0eb3c7;
-    color: white; /* Button text color */
+    color: white;
     background-color: transparent;
     padding: 10px;
     cursor: pointer;
     border-radius: 5px;
     font-size: 14px;
-    margin: 0 5px; /* Space buttons apart */
+    margin: 0 5px;
 }
 
 button:hover {
@@ -116,6 +116,6 @@ button:hover {
 
 #calendar-navigation {
     display: flex;
-    justify-content: space-between; /* Space out buttons */
+    justify-content: space-between;
     margin-bottom: 10px;
 }
