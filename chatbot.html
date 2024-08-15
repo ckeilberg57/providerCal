@@ -3,75 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulated Patient Booking Portal</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 100%;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .options {
+            margin-top: 10px;
+        }
+        .datetime-picker {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div id="chat-container">
-        <div id="chat-output">
-            <div class="message">Simulated Patient Booking Portal</div>
-        </div>
-        <div id="message-input">
-            <input type="text" id="message" placeholder="Type your message here...">
-            <button id="send-button">Send</button>
-        </div>
+    <div class="chat-container">
+        <div id="chat-output"></div>
+        <input type="text" id="chat-input" placeholder="Type your message here" />
+        <button id="send-btn">Send</button>
     </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sendButton = document.getElementById('send-button');
-            const messageInput = document.getElementById('message');
-            const chatOutput = document.getElementById('chat-output');
+        const chatOutput = document.getElementById('chat-output');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
 
-            function appendMessage(text, sender = 'user') {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${sender}`;
-                messageDiv.textContent = text;
-                chatOutput.appendChild(messageDiv);
-                chatOutput.scrollTop = chatOutput.scrollHeight; // Scroll to bottom
+        sendBtn.addEventListener('click', handleChat);
+
+        function handleChat() {
+            const userMessage = chatInput.value.trim().toLowerCase();
+            chatInput.value = '';
+            if (userMessage === '') return;
+
+            displayMessage(`You: ${userMessage}`);
+
+            if (['hello', 'hi', 'help'].includes(userMessage)) {
+                displayMessage('How may I be of assistance today? Here are some common questions:');
+                displayOptions(['Book a consultation', 'Speak to a nurse', 'Cancel a consultation']);
             }
+        }
 
-            function sendMessage() {
-                const messageText = messageInput.value.trim();
-                if (messageText) {
-                    appendMessage(messageText);
-                    messageInput.value = '';
+        function displayMessage(message) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+            msgDiv.innerText = message;
+            chatOutput.appendChild(msgDiv);
+        }
 
-                    // Simulate response
-                    setTimeout(() => {
-                        let responseText = '';
-
-                        switch (messageText.toLowerCase()) {
-                            case 'hello':
-                            case 'hi':
-                            case 'help':
-                                responseText = 'How may I be of assistance today? Here are some common questions: Book a consultation, Speak to a nurse, Cancel a consultation.';
-                                break;
-                            case 'book a consultation':
-                            case 'speak to a nurse':
-                                responseText = 'Great, let me assist in booking an appointment.';
-                                // Add DateTime picker in actual implementation
-                                break;
-                            case 'cancel a consultation':
-                                responseText = 'Consultation cancellation is not yet supported.';
-                                break;
-                            default:
-                                responseText = 'Sorry, I did not understand that. Please choose one of the options provided.';
-                                break;
-                        }
-
-                        appendMessage(responseText, 'bot');
-                    }, 1000); // Simulate delay
-                }
-            }
-
-            sendButton.addEventListener('click', sendMessage);
-            messageInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    sendMessage();
-                }
+        function displayOptions(options) {
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.innerText = option;
+                btn.addEventListener('click', () => handleOptionSelection(option));
+                optionsDiv.appendChild(btn);
             });
-        });
+            chatOutput.appendChild(optionsDiv);
+        }
+
+        function handleOptionSelection(option) {
+            if (option === 'Book a consultation' || option === 'Speak to a nurse') {
+                displayMessage('Great, let me assist in booking an appointment.');
+                showDateTimePicker();
+            }
+        }
+
+        function showDateTimePicker() {
+            const datetimeDiv = document.createElement('div');
+            datetimeDiv.className = 'datetime-picker';
+
+            const dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            datetimeDiv.appendChild(dateInput);
+
+            const timeInput = document.createElement('input');
+            timeInput.type = 'time';
+            datetimeDiv.appendChild(timeInput);
+
+            const saveBtn = document.createElement('button');
+            saveBtn.innerText = 'Save Consultation';
+            saveBtn.addEventListener('click', () => saveConsultation(dateInput.value, timeInput.value));
+            datetimeDiv.appendChild(saveBtn);
+
+            chatOutput.appendChild(datetimeDiv);
+        }
+
+        function saveConsultation(date, time) {
+            const randomNumbers = Math.floor(Math.random() * 10000);
+            const consultationUrl = `https://example.com/webapp/m/ph${randomNumbers}&role=guest`;
+
+            // Add appointment to calendar
+            window.parent.addAppointmentToCalendar(date, time, `Your provider consultation is booked`, consultationUrl);
+
+            // Generate .ics file
+            const icsContent = generateICS(date, time, consultationUrl);
+            downloadICS(icsContent);
+
+            displayMessage('Great, your consultation is booked.');
+        }
+
+        function generateICS(date, time, url) {
+            const event = `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Organization//NONSGML v1.0//EN
+BEGIN:VEVENT
+UID:${Date.now()}
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '')}
+DTSTART:${date.replace(/-/g, '')}T${time.replace(/:/g, '')}00Z
+SUMMARY:Your provider consultation is booked
+DESCRIPTION:Your provider consultation is booked. Join at ${url}
+URL:${url}
+END:VEVENT
+END:VCALENDAR
+            `.trim();
+            return event;
+        }
+
+        function downloadICS(content) {
+            const blob = new Blob([content], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'consultation.ics';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
     </script>
 </body>
 </html>
