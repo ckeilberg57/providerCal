@@ -100,7 +100,7 @@ a.download-link {
 
 button {
     border: 1px solid #0eb3c7;
-    color: #0eb3c7;
+    color: white; /* Button text color */
     background-color: transparent;
     padding: 10px;
     cursor: pointer;
@@ -112,4 +112,10 @@ button {
 button:hover {
     background-color: #0eb3c7;
     color: white;
+}
+
+#calendar-navigation {
+    display: flex;
+    justify-content: space-between; /* Space out buttons */
+    margin-bottom: 10px;
 }
