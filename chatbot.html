@@ -75,11 +75,19 @@
             if (['hello', 'hi', 'help'].includes(userMessage)) {
                 displayMessage('How may I be of assistance today? Here are some common questions:');
                 displayOptions(['Book a consultation', 'Speak to a nurse', 'Cancel a consultation']);
+            } else if (userMessage === 'book') {
+                displayOptions(['Book a consultation', 'Speak to a nurse']);
+            } else if (userMessage === 'cancel') {
+                if (Object.keys(currentAppointments).length === 0) {
+                    displayMessage('No appointments to cancel.');
+                } else {
+                    listAppointmentsToCancel();
+                }
             } else {
                 handleOptionSelection(userMessage);
             }
         }
-
+        
         function displayMessage(message) {
             const msgDiv = document.createElement('div');
             msgDiv.className = 'message';
@@ -115,7 +123,7 @@
         function listAppointmentsToCancel() {
             const optionsDiv = document.createElement('div');
             optionsDiv.className = 'options';
-
+        
             Object.keys(currentAppointments).forEach(dateStr => {
                 const appList = currentAppointments[dateStr];
                 appList.forEach((app, index) => {
@@ -125,7 +133,7 @@
                     optionsDiv.appendChild(btn);
                 });
             });
-
+        
             chatOutput.appendChild(optionsDiv);
         }
 
