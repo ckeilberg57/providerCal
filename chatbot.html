@@ -145,18 +145,18 @@
         }
 
         function cancelAppointment(dateStr, index) {
-            // Remove appointment from calendar
+            // Remove appointment from the parent calendar
             if (window.parent && typeof window.parent.removeAppointmentFromCalendar === 'function') {
                 window.parent.removeAppointmentFromCalendar(dateStr, currentAppointments[dateStr][index].time);
             }
-            
-            // Remove appointment from currentAppointments
+        
+            // Remove the appointment from the currentAppointments
             currentAppointments[dateStr].splice(index, 1);
             if (currentAppointments[dateStr].length === 0) {
                 delete currentAppointments[dateStr];
             }
-            
-            // Provide feedback to the user
+        
+            // Display updated message
             displayMessage('Appointment canceled.');
         }
 
