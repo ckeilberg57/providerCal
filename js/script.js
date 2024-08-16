@@ -99,6 +99,9 @@ function removeAppointmentFromCalendar(dateStr, time) {
         
         // Update the calendar and appointment list
         displaySearchableCalendar(currentMonth, currentYear);
+        
+        // Clear the appointment list
+        appointmentList.innerHTML = '';
     }
 }
 
